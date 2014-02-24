@@ -43,8 +43,8 @@ D1Recognizer understands: 'defaultTemplate | t1 t2 t3 t4 t5 t6 t7 t8
 
 
 D1Recognizer understands: 'distanceAtBest: t1 from: t2 withThetaFrom: t3 to: t4 step: t5 | t6 t7 t8 t9 t10 t11 t12 
-	[t8 _ 0.5 * (1 negated + 5 sqrt).
-	t6 _ t8 * t3 + (1 - t8 * t4).
+	[t8 _ 0.5 * (1.0 negated + 5.0 sqrt).
+	t6 _ t8 * t3 + (1.0 - t8 * t4).
 	t9 _ self distance: t1 from: t2 atAngle: t6.
 	t7 _ 1 - t8 * t3 + (t8 * t4).
 	t10 _ self distance: t1 from: t2 atAngle: t7.
