@@ -3,138 +3,138 @@ Class new title: D1Stroke
 	fields: 'name points'
 	declare: ''
 
-D1Stroke understands: 'centroid: t1 | t2 t3 t4 
-	[t3 _ (t1  1) x.
-	t4 _ (t1  1) y.
-	for t2 to: t1 length do
-	 [t2 > 1 
-	 [t3 _ t3 + (t1  t2) x.
-	 t4 _ t4 + (t1  t2) y]].
-	Point new x: t3 asFloat / t1 length asFloat y: t4 asFloat / t1 length asFloat]' classified: 'As yet unclassified'
+D1Stroke understands: 'centroid: ps | i xs ys 
+	[xs _ (ps  1) x.
+	ys _ (ps  1) y.
+	for i to: ps length do
+	 [i > 1 
+	 [xs _ xs + (ps  i) x.
+	 ys _ ys + (ps  i) y]].
+	Point new x: xs asFloat / ps length asFloat y: ys asFloat / ps length asFloat]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'dist: t1 and: t2 | t3 t4 
-	[t3 _ t1 x asFloat - t2 x asFloat.
-	t4 _ t1 y asFloat - t2 y asFloat.
-	(t3 * t3 + (t4 * t4)) sqrt]' classified: 'As yet unclassified'
+D1Stroke understands: 'dist: p1 and: p2 | dx dy 
+	[dx _ p1 x asFloat - p2 x asFloat.
+	dy _ p1 y asFloat - p2 y asFloat.
+	(dx * dx + (dy * dy)) sqrt]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'indicativeAngle: t1 | t2 t3
-	[t2 _ self centroid: t1.
-	t3 _ (t1  1) - t2.
-	 self theta: t3]' classified: 'As yet unclassified'
+D1Stroke understands: 'indicativeAngle: ps | center first
+	[center _ self centroid: ps.
+	first _ (ps  1) - center.
+	 self theta: first]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'translate: t1 to: t2 | t3 t4 t5 t6 
-	[t3 _ (self centroid: t1) - t2.
-	t5 _ Vector new: t1 length.
-	for t6 to: t1 length do
-	 [t4 _ t1  t6.
-	 t5  t6 _ t4 - t3].
-	t5]' classified: 'As yet unclassified'
+D1Stroke understands: 'translate: ps to: base | offset p newPoints i 
+	[offset _ (self centroid: ps) - base.
+	newPoints _ Vector new: ps length.
+	for i to: ps length do
+	 [p _ ps  i.
+	 newPoints  i _ p - offset].
+	newPoints]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'add: t1 to: t2 beforeIndex: t3 | t4 t5 t6 
-	[t4 _ t2 copy: 1 to: t3 - 1.
-	t5 _ t2 copy: t3 to: t2 length.
-	t6 _ Vector new: 1.
-	t6  1 _ t1.
-	(t4 concat: t6) concat: t5]' classified: 'As yet unclassified'
+D1Stroke understands: 'add: elem to: col beforeIndex: index | before after mid 
+	[before _ col copy: 1 to: index - 1.
+	after _ col copy: index to: col length.
+	mid _ Vector new: 1.
+	mid  1 _ elem.
+	(before concat: mid) concat: after]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'resample: t1 with: t2 | t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 
-	[t10 _ (self pathLength: t1) / (t2 - 1) asFloat.
-	t7 _ 0.0.
-	t3 _ t1 copy.
-	t6 _ 1.
-	t5 _ Vector new: t2.
-	t5  t6 _ (Point new x: (t1  1) x asFloat y: (t1  1) y asFloat).
-	t6 _ t6 + 1.
-	t12 _ 2.
-	while t12  t3 length do
-	 [t11 _ t3  (t12 - 1).
-	 t9 _ t3  t12.
-	 t4 _ self dist: t11 and: t9.
-	 [t7 + t4  t10 
-	 [t8 _ self lerp: t11 to: t9 at: (t10 - t7 / t4).
-	 t5  t6 _ t8.
-	 t6 _ t6 + 1.
-	 t3 _ self add: t8 to: t3 beforeIndex: t12.
-	 t7 _ 0.0]
-	 true  [t7 _ t7 + t4]].
-	 t12 _ t12 + 1].
-	[t5  t2  nil  [t5  t2 _ (Point new x: t3 last x asFloat y: t3 last y asFloat)]].
-	t5]' classified: 'As yet unclassified'
+D1Stroke understands: 'resample: ps with: n | input d newPoints pointsIndex dd q currentP ii lastP i 
+	[ii _ (self pathLength: ps) / (n - 1) asFloat.
+	dd _ 0.0.
+	input _ ps copy.
+	pointsIndex _ 1.
+	newPoints _ Vector new: n.
+	newPoints  pointsIndex _ (Point new x: (ps  1) x asFloat y: (ps  1) y asFloat).
+	pointsIndex _ pointsIndex + 1.
+	i _ 2.
+	while i  input length do
+	 [lastP _ input  (i - 1).
+	 currentP _ input  i.
+	 d _ self dist: lastP and: currentP.
+	 [dd + d  ii 
+	 [q _ self lerp: lastP to: currentP at: (ii - dd / d).
+	 newPoints  pointsIndex _ q.
+	 pointsIndex _ pointsIndex + 1.
+	 input _ self add: q to: input beforeIndex: i.
+	 dd _ 0.0]
+	 true  [dd _ dd + d]].
+	 i _ i + 1].
+	[newPoints  n  nil  [newPoints  n _ (Point new x: input last x asFloat y: input last y asFloat)]].
+	newPoints]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'pathLength: t1 | t2 t3 t4 t5 
-	[t3 _ 0.0.
-	t4 _ t1  1.
-	for t2 to: t1 length do
-	 [t2 > 1 
-	 [t5 _ t1  t2.
-	 t3 _ t3 + (self dist: t4 and: t5).
-	 t4 _ t5]].
-	t3]' classified: 'As yet unclassified'
+D1Stroke understands: 'pathLength: ps | i sum lastP currentP 
+	[sum _ 0.0.
+	lastP _ ps  1.
+	for i to: ps length do
+	 [i > 1 
+	 [currentP _ ps  i.
+	 sum _ sum + (self dist: lastP and: currentP).
+	 lastP _ currentP]].
+	sum]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'preProcess | t1 i
+D1Stroke understands: 'preProcess | radians i
 	[points _ self resample: points with: 64.
 	points _ self translate: points to: 0  0.
-	t1 _ self indicativeAngle: points.
-	points _ self rotate: points by: t1.
+	radians _ self indicativeAngle: points.
+	points _ self rotate: points by: radians.
 	points _ self scale: points to: 250.0.
 	user show: points asString.
 	user cr]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'rotate: t1 by: t2 | t3 t4 t5 t6 t7 
-	[t5 _ Vector new: t1 length.
-	for t3 to: t1 length do
-	 [t4 _ t1  t3.
-	 t6 _ self dist: t4 and: (Point new x: 0.0 y: 0.0).
-	 t7 _ t2 asFloat - (self theta: t4).
-	 t5  t3 _ t6 * t7 cos  (0.0 - (t6 * t7 sin))].
-	t5]' classified: 'As yet unclassified'
+D1Stroke understands: 'rotate: ps by: rad | i p newPoints d theta 
+	[newPoints _ Vector new: ps length.
+	for i to: ps length do
+	 [p _ ps  i.
+	 d _ self dist: p and: (Point new x: 0.0 y: 0.0).
+	 theta _ rad asFloat - (self theta: p).
+	 newPoints  i _ d * theta cos  (0.0 - (d * theta sin))].
+	newPoints]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'scale: t1 to: t2 | t3 t4 t5 t6 
-	[t3 _ (self encompassingRectangle: t1) extent.
-	t5 _ Vector new: t1 length.
-	for t4 to: t1 length do
-	 [t6 _ t1  t4.
-	 t5  t4 _ t6 x * t2 asFloat / t3 x asFloat  (t6 y * t2 asFloat / t3 y asFloat)].
-	t5]' classified: 'As yet unclassified'
+D1Stroke understands: 'scale: ps to: s | bbExt i newPoints p 
+	[bbExt _ (self encompassingRectangle: ps) extent.
+	newPoints _ Vector new: ps length.
+	for i to: ps length do
+	 [p _ ps  i.
+	 newPoints  i _ p x * s asFloat / bbExt x asFloat  (p y * s asFloat / bbExt y asFloat)].
+	newPoints]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'theta: t1 | t2 t3 t4 t5 
-	[t2 _ t1 x.
-	t3 _ t1 y.
-	[t2 = 0 
-	 [t3  0  [1.5707963]
+D1Stroke understands: 'theta: p | x y theta tan 
+	[x _ p x.
+	y _ p y.
+	[x = 0 
+	 [y  0  [1.5707963]
 	 true  [4.712389]]].
-	t5 _ t3 asFloat / t2 asFloat.
-	t4 _ self arctan: t5.
-	[t2  0 
-	 [t3  0  [t4]
-	 true  [ 6.2831853 + t4]]].
-	true  [ 3.1415927 + t4]]' classified: 'As yet unclassified'
+	tan _ y asFloat / x asFloat.
+	theta _ self arctan: tan.
+	[x  0 
+	 [y  0  [theta]
+	 true  [ 6.2831853 + theta]]].
+	true  [ 3.1415927 + theta]]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'name: t1 
-	[name _ t1]' classified: 'As yet unclassified'
+D1Stroke understands: 'name: aName 
+	[name _ aName]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'points: t1 
-	[points _ t1]' classified: 'As yet unclassified'
+D1Stroke understands: 'points: ps 
+	[points _ ps]' classified: 'As yet unclassified'
 
 
 D1Stroke understands: 'points [points]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'arctan: t1 | t2 
-	[t2 _ t1 arctan.
-	t2 / 360.0 * 6.2831853]' classified: 'As yet unclassified'
+D1Stroke understands: 'arctan: aFloat | arctan 
+	[arctan _ aFloat arctan.
+	arctan / 360.0 * 6.2831853]' classified: 'As yet unclassified'
 
 
 D1Stroke understands: 'lerp: a to: b at: ratio | aa bb "short comment"

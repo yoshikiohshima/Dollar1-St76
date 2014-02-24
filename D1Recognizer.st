@@ -7,19 +7,19 @@ D1Recognizer understands: 'templates
 	[ templates]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'recognize: t1 against: t2 in: t3 | t4 t5 t6 t7 t8 t9 
-	[t4 _ 1.0e7.
-	t6 _ nil.
-	for t9 to: t2 length do
-	 [t7 _ t2  t9.
-	 t5 _ self distanceAtBest: t1 from: t7 withThetaFrom: 45 negated to: 45 step: 2.
-	 t5 < t4 
-	 [t4 _ t5.
-	 t6 _ t7]].
-	t8 _ Vector new: 2.
-	t8  1 _ t6.
-	t8  2 _ 1 - (t4 / (0.5 * (2 * (t3 * t3)) sqrt)).
-	t8]' classified: 'As yet unclassified'
+D1Recognizer understands: 'recognize: stroke against: temps in: size | b score bt t result i 
+	[b _ 1.0e7.
+	bt _ nil.
+	for i to: temps length do
+	 [t _ temps  i.
+	 score _ self distanceAtBest: stroke from: t withThetaFrom: 45 negated to: 45 step: 2.
+	 score < b 
+	 [b _ score.
+	 bt _ t]].
+	result _ Vector new: 2.
+	result  1 _ bt.
+	result  2 _ 1 - (b / (0.5 * (2 * (size * size)) sqrt)).
+	result]' classified: 'As yet unclassified'
 
 
 D1Recognizer understands: 'distance: stroke from: t atAngle: theta | newPoints
@@ -32,55 +32,55 @@ D1Recognizer understands: 'initTemplates
 	[templates _ self defaultTemplate]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'defaultTemplate | t1 t2 t3 t4 t5 t6 t7 t8 
-	[t2 _ self defaultTemplateData.
-	t1 _ Vector new: t2 length.
-	for t8 to: t1 length do
-	 [t4 _ t2  t8.
-	 t3 _ D1Stroke new.
-	 t6 _ t4  2.
-	 t5 _ Vector new: t6 length / 2.
-	 t7 _ 1.
-	 while t7  t5 length do
-	 [t5  t7 _ Point new x: t6  (t7 * 2 - 1) y: t6  (t7 * 2).
-	 t7 _ t7 + 1].
-	 t3 name: t4  1.
-	 t3 points: t5.
-	 t1  t8 _ t3].
-	t1]' classified: 'As yet unclassified'
+D1Recognizer understands: 'defaultTemplate | strokes ts stroke data ps cs i j 
+	[ts _ self defaultTemplateTs.
+	strokes _ Vector new: ts length.
+	for j to: strokes length do
+	 [data _ ts  j.
+	 stroke _ D1Stroke new.
+	 cs _ data  2.
+	 ps _ Vector new: cs length / 2.
+	 i _ 1.
+	 while i  ps length do
+	 [ps  i _ Point new x: cs  (i * 2 - 1) y: cs  (i * 2).
+	 i _ i + 1].
+	 stroke name: data  1.
+	 stroke points: ps.
+	 strokes  j _ stroke].
+	strokes]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'distanceAtBest: t1 from: t2 withThetaFrom: t3 to: t4 step: t5 | t6 t7 t8 t9 t10 t11 t12 
-	[t8 _ 0.5 * (1 negated + 5 sqrt).
-	t6 _ t8 * t3 + (1 - t8 * t4).
-	t9 _ self distance: t1 from: t2 atAngle: t6.
-	t7 _ 1 - t8 * t3 + (t8 * t4).
-	t10 _ self distance: t1 from: t2 atAngle: t7.
-	t11 _ t3.
-	t12 _ t4.
-	while (t12 - t11) abs > t5 do
-	 [t9 < t10 
-	 [t12 _ t7.
-	 t7 _ t6.
-	 t10 _ t9.
-	 t6 _ t8 * t11 + (1 - t8 * t12).
-	 t9 _ self distance: t1 from: t2 atAngle: t6]
+D1Recognizer understands: 'distanceAtBest: stroke from: t withThetaFrom: thetaA to: thetaB step: step | x1 x2 phi f1 f2 tA tB 
+	[phi _ 0.5 * (1 negated + 5 sqrt).
+	x1 _ phi * thetaA + (1 - phi * thetaB).
+	f1 _ self distance: stroke from: t atAngle: x1.
+	x2 _ 1 - phi * thetaA + (phi * thetaB).
+	f2 _ self distance: stroke from: t atAngle: x2.
+	tA _ thetaA.
+	tB _ thetaB.
+	while (tB - tA) abs > step do
+	 [f1 < f2 
+	 [tB _ x2.
+	 x2 _ x1.
+	 f2 _ f1.
+	 x1 _ phi * tA + (1 - phi * tB).
+	 f1 _ self distance: stroke from: t atAngle: x1]
 	 true 
-	 [t11 _ t6.
-	 t6 _ t7.
-	 t9 _ t10.
-	 t7 _ 1 - t8 * t11 + (t8 * t12).
-	 t10 _ self distance: t1 from: t2 atAngle: t7]].
-	t9 min: t10]' classified: 'As yet unclassified'
+	 [tA _ x1.
+	 x1 _ x2.
+	 f1 _ f2.
+	 x2 _ 1 - phi * tA + (phi * tB).
+	 f2 _ self distance: stroke from: t atAngle: x2]].
+	f1 min: f2]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'pathDistance: t1 from: t2 | t3 t4 t5 t6 
-	[t5 _ 0.0.
-	for t6 to: t1 length do
-	 [t3 _ t1  t6.
-	 t4 _ t2  t6.
-	 t5 _ t5 + (t3 dist: t3 and: t4)].
-	t5 / t1 length asFloat]' classified: 'As yet unclassified'
+D1Recognizer understands: 'pathDistance: a from: b | ai bi d i 
+	[d _ 0.0.
+	for i to: a length do
+	 [ai _ a  i.
+	 bi _ b  i.
+	 d _ d + (ai dist: ai and: bi)].
+	d / a length asFloat]' classified: 'As yet unclassified'
 
 
 D1Recognizer understands: 'defaultTemplateData 
