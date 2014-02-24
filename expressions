@@ -179,3 +179,11 @@ distance: stroke from: t atAngle: theta | newPoints
 	[newPoints _ stroke rotate: stroke points by: theta.
 	^ self pathDistance: newPoints from: t points]
 
+makePointsFromData: cs | ps i
+	[ps _ Vector new: cs length / 2.
+	i _ 1.
+	while i  ps length do
+		[ps  i _ Point new x: cs  (i * 2 - 1) y: cs  (i * 2).
+		i _ i + 1].
+	ps]
+
