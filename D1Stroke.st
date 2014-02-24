@@ -21,11 +21,7 @@ D1Stroke understands: 'dist: t1 and: t2 | t3 t4
 
 D1Stroke understands: 'indicativeAngle: t1 | t2 t3
 	[t2 _ self centroid: t1.
-	user show: t2 asString.
-	user cr.
 	t3 _ (t1  1) - t2.
-	user show: t3 asString.
-	user cr.
 	 self theta: t3]' classified: 'As yet unclassified'
 
 
@@ -48,8 +44,6 @@ D1Stroke understands: 'add: t1 to: t2 beforeIndex: t3 | t4 t5 t6
 
 D1Stroke understands: 'resample: t1 with: t2 | t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 
 	[t10 _ (self pathLength: t1) / (t2 - 1) asFloat.
-	user show: t10 asString.
-	user cr.
 	t7 _ 0.0.
 	t3 _ t1 copy.
 	t6 _ 1.
@@ -88,10 +82,10 @@ D1Stroke understands: 'preProcess | t1 i
 	[points _ self resample: points with: 64.
 	points _ self translate: points to: 0  0.
 	t1 _ self indicativeAngle: points.
-	user show: ''ind ''.
-	user show: t1 asString.
 	points _ self rotate: points by: t1.
-	points _ self scale: points to: 250]' classified: 'As yet unclassified'
+	points _ self scale: points to: 250.0.
+	user show: points asString.
+	user cr]' classified: 'As yet unclassified'
 
 
 D1Stroke understands: 'rotate: t1 by: t2 | t3 t4 t5 t6 t7 
@@ -100,7 +94,7 @@ D1Stroke understands: 'rotate: t1 by: t2 | t3 t4 t5 t6 t7
 	 [t4 _ t1  t3.
 	 t6 _ self dist: t4 and: (Point new x: 0.0 y: 0.0).
 	 t7 _ t2 asFloat - (self theta: t4).
-	 t5  t3 _ t6 * t7 cos  (0 - (t6 * t7 sin))].
+	 t5  t3 _ t6 * t7 cos  (0.0 - (t6 * t7 sin))].
 	t5]' classified: 'As yet unclassified'
 
 
@@ -149,7 +143,7 @@ D1Stroke understands: 'lerp: a to: b at: ratio | aa bb "short comment"
 	 aa + ((bb - aa) * ratio)]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'encompassing: ps | topLeft bottomRight i p
+D1Stroke understands: 'encompassingRectangle: ps | topLeft bottomRight i p
 	[for i to: ps length do [
 	 p _ ps  i.
 	 [topLeft  nil  [

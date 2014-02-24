@@ -174,3 +174,8 @@ preProcess | radians
 	points _ self rotate: points by: radians.
 	points _ self scale: points to: 250]
 
+
+distance: stroke from: t atAngle: theta | newPoints
+	[newPoints _ stroke rotate: stroke points by: theta.
+	^ self pathDistance: newPoints from: t points]
+

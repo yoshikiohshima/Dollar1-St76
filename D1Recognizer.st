@@ -22,6 +22,12 @@ D1Recognizer understands: 'recognize: t1 against: t2 in: t3 | t4 t5 t6 t7 t8 t9
 	t8]' classified: 'As yet unclassified'
 
 
+D1Recognizer understands: 'distance: stroke from: t atAngle: theta | newPoints
+	[newPoints _ stroke rotate: stroke points by: theta.
+	 self pathDistance: newPoints from: t points]
+' classified: 'As yet unclassified'
+
+
 D1Recognizer understands: 'initTemplates
 	[templates _ self defaultTemplate]' classified: 'As yet unclassified'
 
@@ -73,7 +79,7 @@ D1Recognizer understands: 'pathDistance: t1 from: t2 | t3 t4 t5 t6
 	for t6 to: t1 length do
 	 [t3 _ t1  t6.
 	 t4 _ t2  t6.
-	 t5 _ t5 + (self dist: t3 and: t4)].
+	 t5 _ t5 + (t3 dist: t3 and: t4)].
 	t5 / t1 length asFloat]' classified: 'As yet unclassified'
 
 
