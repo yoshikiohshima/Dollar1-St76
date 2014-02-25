@@ -86,12 +86,12 @@ D1Recognizer understands: 'distanceAtBest: stroke from: t withThetaFrom: thetaA 
 	f1 min: f2]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'pathDistance: a from: b | ai bi d i 
+D1Recognizer understands: 'pathDistance: a from: b for: t | ai bi d i 
 	[d _ 0.0.
 	for i to: a length do
 	 [ai _ a  i.
 	 bi _ b  i.
-	 d _ d + (ai dist: ai and: bi)].
+	 d _ d + (t dist: ai and: bi)].
 	d / a length asFloat]' classified: 'As yet unclassified'
 
 
