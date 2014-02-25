@@ -13,6 +13,9 @@ with a curved arrow.  Presumably I should evaluate that.  But How do I enter the
 
 user update: '0012sqrt-yo.st' message: 'add float primitive' _ ('Float sqrt')
 
+user update: '0012sqrt-yo.st' message: 'add float primitive' _ Changes contents
+
+
 | a.
 a _ Stream default.
 user filoutChanges: ('D1Stroke resample:with:') on: a.

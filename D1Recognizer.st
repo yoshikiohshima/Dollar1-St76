@@ -28,12 +28,12 @@ D1Recognizer understands: 'recognize: stroke against: temps in: size | pi b scor
 	pi _ self pi.
 	for i to: temps length do
 	 [t _ temps  i.
-	 score _ self distanceAtBest: stroke from: t withThetaFrom: (pi / 4.0) negated to: (pi / 4.0) step: (pi / 90.0).
+	 score _ self distanceAtBest: stroke from: t withThetaFrom: (pi / 40.0) negated to: (pi / 40.0) step: (pi / 90.0).
 	 score < b 
 	 [b _ score.
 	 bt _ t]].
 	result _ Vector new: 2.
-	result  1 _ bt.
+	result  1 _ bt name.
 	result  2 _ 1.0 - (b / (0.5 * (2.0 * (size * size)) sqrt)).
 	result]' classified: 'As yet unclassified'
 
