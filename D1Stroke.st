@@ -100,15 +100,17 @@ D1Stroke understands: 'add: elem to: col beforeIndex: index | before after mid
 	(before concat: mid) concat: after]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'resample: ps with: n | input d newPoints pointsIndex dd q currentP ii lastP
+D1Stroke understands: 'resample: ps with: n | input d newPoints pointsIndex dd q currentP ii lastP first
 	[ii _ (self pathLength: ps) / (n - 1) asFloat.
 	dd _ 0.0.
+	first _ Point new x: (ps  1) x asFloat y: (ps  1) y asFloat.
+	ps  1 _ first.
 	input _ D1Stream new init: ps.
 	pointsIndex _ 1.
 	newPoints _ Vector new: n.
 	newPoints  pointsIndex _ (Point new x: (ps  1) x asFloat y: (ps  1) y asFloat).
 	pointsIndex _ pointsIndex + 1.
-	while input atEnd  false do
+	while input atEnd  true do
 	 [lastP _ input prev.
 	 currentP _ input current.
 	 d _ self dist: lastP and: currentP.

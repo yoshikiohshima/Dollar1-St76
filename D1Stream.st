@@ -24,7 +24,8 @@ D1Stream understands: 'current
 
 
 D1Stream understands: 'atEnd
-	[ coolStart = cool length]' classified: 'As yet unclassified'
+	[
+	 (hot  nil and [coolStart = cool length]) or [nil  hot and [coolStart > cool length]]]' classified: 'As yet unclassified'
 
 
 D1Stream understands: 'init: aVector
