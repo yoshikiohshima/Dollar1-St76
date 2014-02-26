@@ -1,7 +1,8 @@
 Class new title: D1Recognizer
 	subclassof: Object
 	fields: ' templates'
-	declare: ''
+	declare: '';
+	classified: 'D1Recognizer'
 
 D1Recognizer understands: 'recognize: points | stroke
 	[stroke _ D1Stroke new points: points.
@@ -101,5 +102,25 @@ D1Recognizer understands: 'defaultTemplateData
 
 D1Recognizer understands: 'pi
 	[3.141592653589793]' classified: 'As yet unclassified'
+
+
+D1Recognizer understands: 'start | a last current t
+	[a _ Stream new of: (Vector new: 20).
+	user waitnobug.
+	last _ user waitbug.
+	a next _ last.
+	t _ Turtle new.
+	t init.
+	t penup.
+	t goto: last.
+	t pendn.
+	while user redbug do [
+	 current _ user mp.
+	 [last  current  [
+	 a next _ current.
+	 t goto: current.
+	 last _ current]]].
+	user show: (self recognize: a contents) asString.
+	user cr]' classified: 'As yet unclassified'
 
 
