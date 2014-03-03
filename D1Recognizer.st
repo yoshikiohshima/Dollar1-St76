@@ -4,12 +4,6 @@ Class new title: D1Recognizer
 	declare: '';
 	classified: 'D1Recognizer'
 
-D1Recognizer understands: 'recognize: points | stroke
-	[stroke _ D1Stroke new points: points.
-	stroke preProcess.
-	 self recognize: stroke against: templates in: 250.0.]' classified: 'As yet unclassified'
-
-
 D1Recognizer understands: 'makePointsFromData: cs | ps i
 	[ps _ Vector new: cs length / 2.
 	i _ 1.
@@ -104,23 +98,9 @@ D1Recognizer understands: 'pi
 	[3.141592653589793]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'start | a last current t
-	[a _ Stream new of: (Vector new: 20).
-	user waitnobug.
-	last _ user waitbug.
-	a next _ last.
-	t _ Turtle new.
-	t init.
-	t penup.
-	t goto: last.
-	t pendn.
-	while user redbug do [
-	 current _ user mp.
-	 [last  current  [
-	 a next _ current.
-	 t goto: current.
-	 last _ current]]].
-	user show: (self recognize: a contents) asString.
-	user cr]' classified: 'As yet unclassified'
+D1Recognizer understands: 'recognize: t1 | t2 
+	[t2 _ D1Stroke new points: t1.
+	t2 preProcess.
+	self recognize: t2 against: templates in: 250.0]' classified: 'As yet unclassified'
 
 
