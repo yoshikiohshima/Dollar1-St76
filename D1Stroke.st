@@ -1,16 +1,8 @@
 Class new title: D1Stroke
 	subclassof: Object
-	fields: ' name points'
+	fields: ' name points isLong'
 	declare: '';
 	classified: 'D1Recognizer'
-
-D1Stroke understands: 'points: ps 
-	[points _ ps]' classified: 'As yet unclassified'
-
-
-D1Stroke understands: 'name: aName 
-	[name _ aName]' classified: 'As yet unclassified'
-
 
 D1Stroke understands: 'rotate: ps by: rad | i p newPoints d theta 
 	[newPoints _ Vector new: ps length.
@@ -49,14 +41,6 @@ D1Stroke understands: 'translate: ps to: base | offset p newPoints i
 	 [p _ ps  i.
 	 newPoints  i _ p - offset].
 	newPoints]' classified: 'As yet unclassified'
-
-
-D1Stroke understands: 'add: elem to: col beforeIndex: index | before after mid 
-	[before _ col copy: 1 to: index - 1.
-	after _ col copy: index to: col length.
-	mid _ Vector new: 1.
-	mid  1 _ elem.
-	(before concat: mid) concat: after]' classified: 'As yet unclassified'
 
 
 D1Stroke understands: 'resample: ps with: n | input d newPoints pointsIndex dd q currentP ii lastP first
@@ -99,24 +83,48 @@ D1Stroke understands: 'pathLength: ps | i sum lastP currentP
 
 D1Stroke understands: 'preProcess | radians i
 	[points _ self resample: points with: 64.
+	isLong _ self isSkinny: points.
 	points _ self translate: points to: 0  0.
 	radians _ self indicativeAngle: points.
 	points _ self rotate: points by: radians.
 	points _ self scale: points to: 250.0]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'scale: ps to: s | bbExt i newPoints p 
+D1Stroke understands: 'scale: ps to: s | bbExt bbx bby ss i newPoints p 
 	[bbExt _ (self encompassingRectangle: ps) extent.
+	bbx _ bbExt x asFloat.
+	bby _ bbExt y asFloat.
+	ss _ s asFloat.
 	newPoints _ Vector new: ps length.
 	for i to: ps length do
 	 [p _ ps  i.
-	 newPoints  i _ p x * s asFloat / bbExt x asFloat  (p y * s asFloat / bbExt y asFloat)].
+	 newPoints  i _ p x * ss / bbx  (p y * ss / bby)].
 	newPoints]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'arctan: aFloat | arctan 
-	[arctan _ aFloat arctan.
-	arctan]' classified: 'As yet unclassified'
+D1Stroke understands: 'arctan: aFloat
+	[ aFloat arctan]' classified: 'As yet unclassified'
+
+
+D1Stroke understands: 'isLong
+	[ isLong]' classified: 'As yet unclassified'
+
+
+D1Stroke understands: 'isSkinny: ps | max min t end begin p pi i
+	[end _ ps last.
+	begin _ ps  1.
+	pi _ 3.141592653589793.
+	min _ pi.
+	max _ min negated.
+	for i from: 1 to: ps length do [
+	 [i  (ps length / 2)	 [p _ end - (ps  i)]
+	 true  [p _ (ps  i) - begin]].
+	 t _ self theta: p.
+	 [t > (pi * 1.5)  [t _ t - (pi * 2.0)]].
+	 max _ max max: t.
+	 min _ min min: t].
+	 (max - min) < 0.3]
+' classified: 'As yet unclassified'
 
 
 D1Stroke understands: 'name
@@ -137,10 +145,12 @@ D1Stroke understands: 'theta: p | x y theta tan
 	true  [ 3.1415927 + theta]]' classified: 'As yet unclassified'
 
 
-D1Stroke understands: 'lerp: a to: b at: ratio | aa bb "short comment"
-	[aa _ Point new x: a x asFloat y: a y asFloat.
-	bb _ Point new x: b x asFloat y: b y asFloat.
-	 aa + ((bb - aa) * ratio)]' classified: 'As yet unclassified'
+D1Stroke understands: 'lerp: a to: b at: ratio | ax ay bx by
+	[ax _ a x asFloat.
+	ay _ a y asFloat.
+	bx _ b x asFloat.
+	by _ b y asFloat.
+	 Point new x: ax + ((bx - ax) * ratio) y: ay + ((by - ay) * ratio)]' classified: 'As yet unclassified'
 
 
 D1Stroke understands: 'encompassingRectangle: ps | topLeft bottomRight i p
@@ -159,5 +169,13 @@ D1Stroke understands: 'dist: p1 and: p2 | dx dy
 	[dx _ p1 x asFloat - p2 x asFloat.
 	dy _ p1 y asFloat - p2 y asFloat.
 	(dx * dx + (dy * dy)) sqrt]' classified: 'As yet unclassified'
+
+
+D1Stroke understands: 'points: ps 
+	[points _ ps]' classified: 'As yet unclassified'
+
+
+D1Stroke understands: 'name: aName 
+	[name _ aName]' classified: 'As yet unclassified'
 
 

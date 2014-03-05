@@ -4,19 +4,6 @@ Class new title: D1Recognizer
 	declare: '';
 	classified: 'D1Recognizer'
 
-D1Recognizer understands: 'makePointsFromData: cs | ps i
-	[ps _ Vector new: cs length / 2.
-	i _ 1.
-	while i  ps length do
-	 [ps  i _ Point new x: cs  (i * 2 - 1) y: cs  (i * 2).
-	 i _ i + 1].
-	ps]' classified: 'As yet unclassified'
-
-
-D1Recognizer understands: 'templates
-	[ templates]' classified: 'As yet unclassified'
-
-
 D1Recognizer understands: 'recognize: stroke against: temps in: size | pi b score bt t result i 
 	[b _ 1.0e7.
 	bt _ nil.
@@ -98,9 +85,22 @@ D1Recognizer understands: 'pi
 	[3.141592653589793]' classified: 'As yet unclassified'
 
 
-D1Recognizer understands: 'recognize: t1 | t2 
-	[t2 _ D1Stroke new points: t1.
-	t2 preProcess.
-	self recognize: t2 against: templates in: 250.0]' classified: 'As yet unclassified'
+D1Recognizer understands: 'recognize: ps | stroke
+	[stroke _ D1Stroke new points: ps.
+	stroke preProcess.
+	[stroke isLong  [ (''line'' 1.0)]].
+	self recognize: stroke against: templates in: 250.0]' classified: 'As yet unclassified'
+
+
+D1Recognizer understands: 'makePointsFromData: cs | ps i
+	[ps _ Vector new: cs length / 2.
+	i _ 1.
+	while i  ps length do
+	 [ps  i _ Point new x: cs  (i * 2 - 1) y: cs  (i * 2).
+	 i _ i + 1].
+	ps]' classified: 'As yet unclassified'
+
+
+D1Recognizer understands: 'templates [templates]' classified: 'As yet unclassified'
 
 

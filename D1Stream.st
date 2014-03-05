@@ -4,19 +4,17 @@ Class new title: D1Stream
 	declare: '';
 	classified: 'D1Recognizer'
 
-D1Stream understands: 'shift
-	[[hot  nil  [coolStart _ coolStart + 1.  self]
-	true  [hot _ nil]]]' classified: 'As yet unclassified'
-
-
-D1Stream understands: 'prev
-	[[hot  nil  [ cool  coolStart]].
-	 hot]' classified: 'As yet unclassified'
-
-
 D1Stream understands: 'atEnd
 	[
 	 (hot  nil and [coolStart = cool length]) or [nil  hot and [coolStart > cool length]]]' classified: 'As yet unclassified'
+
+
+D1Stream understands: 'init: aVector
+	[cool _ aVector.
+	coolStart _ 2.
+	coolEnd _ aVector length.
+	hot _ cool  1]
+' classified: 'As yet unclassified'
 
 
 D1Stream understands: 'push: anObject
@@ -29,11 +27,13 @@ D1Stream understands: 'current
 	 cool  coolStart]' classified: 'As yet unclassified'
 
 
-D1Stream understands: 'init: aVector
-	[cool _ aVector.
-	coolStart _ 2.
-	coolEnd _ aVector length.
-	hot _ cool  1]
-' classified: 'As yet unclassified'
+D1Stream understands: 'shift
+	[[hot  nil  [coolStart _ coolStart + 1.  self]
+	true  [hot _ nil]]]' classified: 'As yet unclassified'
+
+
+D1Stream understands: 'prev
+	[[hot  nil  [ cool  coolStart]].
+	 hot]' classified: 'As yet unclassified'
 
 
